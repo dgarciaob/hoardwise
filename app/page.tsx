@@ -3,15 +3,18 @@ import Image from "next/image";
 
 import { Menu } from "lucide-react";
 
-import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
+import Logo from "@/components/Logo";
 import FeaturesSection from "@/components/Features";
 import PricingTable from "@/components/Pricing";
 
+import { UserButton, auth } from "@clerk/nextjs";
+
 export default function Home() {
+  const { userId } = auth();
   return (
     <main className="selection:bg-emerald-200" id="init">
       <nav className="mx-auto max-w-5xl flex items-center justify-between py-4 px-8">
@@ -37,14 +40,23 @@ export default function Home() {
             Pricing
           </Link>
         </div>
-        <div className="hidden md:flex flex-row space-x-4 items-center">
-          <Link href="/">
-            <Button variant="ghost">Sign In</Button>
-          </Link>
-          <Link href="/">
-            <Button>Sign Up</Button>
-          </Link>
-        </div>
+        {userId ? (
+          <div className="hidden md:flex flex-row space-x-4 items-center">
+            <Link href="/dashboard">
+              <Button variant="ghost">Dashboard</Button>
+            </Link>
+            <UserButton afterSignOutUrl="/" />
+          </div>
+        ) : (
+          <div className="hidden md:flex flex-row space-x-4 items-center">
+            <Link href="/sign-in">
+              <Button variant="ghost">Sign In</Button>
+            </Link>
+            <Link href="/sign-up">
+              <Button>Sign Up</Button>
+            </Link>
+          </div>
+        )}
 
         {/* Mobile Nav */}
         <Sheet>
@@ -77,16 +89,23 @@ export default function Home() {
                 </Link>
               </div>
 
-              <div className="flex flex-col space-y-4 items-center">
-                <Link href="/" className="w-full">
-                  <Button variant="ghost" className="w-full">
-                    Sign In
-                  </Button>
-                </Link>
-                <Link href="/" className="w-full">
-                  <Button className="w-full">Sign Up</Button>
-                </Link>
-              </div>
+              {userId ? (
+                <div className="flex flex-row items-center space-x-12">
+                  <Link href="/dashboard">
+                    <Button variant="ghost">Dashboard</Button>
+                  </Link>
+                  <UserButton afterSignOutUrl="/" />
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-4 items-center">
+                  <Link href="/sign-in">
+                    <Button variant="ghost">Sign In</Button>
+                  </Link>
+                  <Link href="/sign-up">
+                    <Button>Sign Up</Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </SheetContent>
         </Sheet>
