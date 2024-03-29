@@ -34,3 +34,11 @@ export const createTransaction = async ({
   });
   return transaction;
 };
+
+export const deleteTransaction = async (id: string) => {
+  await db.transaction.delete({
+    where: {
+      id: id,
+    },
+  });
+};
