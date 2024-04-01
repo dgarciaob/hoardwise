@@ -26,7 +26,6 @@ model User {
   phone     String?
   transactions Transaction[]
   emails    UserEmail[]
-
 }
 
 model UserEmail {
@@ -49,4 +48,6 @@ model Transaction {
   title      String
   type      TransactionType 
 }
+
+
 

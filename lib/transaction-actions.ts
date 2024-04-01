@@ -9,6 +9,7 @@ type TransactionProps = {
   amount: number;
   type: TransactionType;
   date: Date;
+  // category: string;
 };
 
 export const createTransaction = async ({
@@ -16,7 +17,8 @@ export const createTransaction = async ({
   amount,
   type,
   date,
-}: TransactionProps) => {
+}: // category,
+TransactionProps) => {
   const { userId } = auth();
 
   if (!userId) {
@@ -30,8 +32,10 @@ export const createTransaction = async ({
       type,
       date,
       userId,
+      // categoryName: category,
     },
   });
+
   return transaction;
 };
 
@@ -39,6 +43,23 @@ export const deleteTransaction = async (id: string) => {
   await db.transaction.delete({
     where: {
       id: id,
+    },
+  });
+};
+
+export const editTransaction = async (
+  id: string,
+  { title, amount, type, date }: TransactionProps
+) => {
+  await db.transaction.update({
+    where: {
+      id: id,
+    },
+    data: {
+      title: title,
+      amount: amount,
+      type: type,
+      date: date,
     },
   });
 };

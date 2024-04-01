@@ -15,10 +15,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-import { deleteTransaction } from "@/lib/transaction-actions";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
+import { deleteTransaction } from "@/lib/transaction-actions";
 
 interface ActionCellProps {
   row: Row<Transaction>;
@@ -27,7 +27,6 @@ interface ActionCellProps {
 const ActionCell: React.FC<ActionCellProps> = ({ row }) => {
   const payment = row.original;
   const router = useRouter();
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -69,6 +68,26 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "title",
     header: "Title",
+  },
+  {
+    accessorKey: "date",
+    header: "Date",
+    cell: ({ row }) => {
+      const date = new Date(row.getValue("date"));
+      const formatted = new Intl.DateTimeFormat("en-PE", {
+        dateStyle: "short",
+      }).format(date);
+
+      return <div>{formatted}</div>;
+    },
+  },
+  {
+    accessorKey: "categoryName",
+    header: "Category",
+    cell: ({ row }) => {
+      const category = row.getValue("categoryName") as string;
+      return <div>{category}</div>;
+    },
   },
   {
     accessorKey: "amount",

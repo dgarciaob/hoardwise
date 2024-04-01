@@ -35,19 +35,24 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { createTransaction } from "@/lib/transaction-actions";
+// import { CategorySelection } from "./CategorySelect";
+
+// type TransactionFormProps = {
+//   options: { id: string; name: string }[];
+// };
 
 const formSchema = z.object({
   type: z.enum(["Expense", "Income"]),
   title: z.string().min(1, "Title must be at least 1 character"),
   amount: z.coerce.number(),
   date: z.date(),
+  // category: z.string(),
 });
 
 export const TransactionForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      type: "Expense",
       title: "",
       amount: 0,
       date: new Date(),
@@ -60,7 +65,6 @@ export const TransactionForm = () => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // await axios.post("/api/transactions", values);
       createTransaction(values);
       toast.success("Transaction created");
       router.refresh();
@@ -142,6 +146,25 @@ export const TransactionForm = () => {
               );
             }}
           />
+          {/* <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel className="text-base">Category</FormLabel>
+                  <FormControl>
+                    <CategorySelection
+                      disabled={isSubmitting}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                      options={options}
+                    />
+                  </FormControl>
+                </FormItem>
+              );
+            }}
+          /> */}
           <FormField
             control={form.control}
             name="date"
@@ -174,9 +197,9 @@ export const TransactionForm = () => {
                         selected={field.value}
                         onSelect={field.onChange}
                         disabled={(date) =>
-                          isSubmitting ||
                           date > new Date() ||
-                          date < new Date("1900-01-01")
+                          date < new Date("1900-01-01") ||
+                          isSubmitting
                         }
                         initialFocus
                       />
