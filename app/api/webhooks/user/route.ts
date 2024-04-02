@@ -56,9 +56,8 @@ export async function POST(req: Request) {
     where: { id: id as string },
     create: {
       id: id as string,
-      firstName: payload.given_name,
-      lastName: payload.family_name,
-      phone: payload.phone_number,
+      firstName: payload.data.first_name,
+      lastName: payload.data.last_name,
     },
     update: {},
   });

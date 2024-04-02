@@ -35,21 +35,21 @@ import { CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
 import { createTransaction } from "@/lib/transaction-actions";
-// import { CategorySelection } from "./CategorySelect";
+import { CategorySelection } from "./CategorySelect";
 
-// type TransactionFormProps = {
-//   options: { id: string; name: string }[];
-// };
+type TransactionFormProps = {
+  options: { id: string; name: string; userId?: string }[];
+};
 
 const formSchema = z.object({
   type: z.enum(["Expense", "Income"]),
   title: z.string().min(1, "Title must be at least 1 character"),
   amount: z.coerce.number(),
   date: z.date(),
-  // category: z.string(),
+  category: z.string(),
 });
 
-export const TransactionForm = () => {
+export const TransactionForm = ({ options }: TransactionFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -67,6 +67,7 @@ export const TransactionForm = () => {
     try {
       createTransaction(values);
       toast.success("Transaction created");
+      console.log(values);
       router.refresh();
     } catch {
       toast.error("Failed to create transaction");
@@ -146,7 +147,7 @@ export const TransactionForm = () => {
               );
             }}
           />
-          {/* <FormField
+          <FormField
             control={form.control}
             name="category"
             render={({ field }) => {
@@ -164,7 +165,7 @@ export const TransactionForm = () => {
                 </FormItem>
               );
             }}
-          /> */}
+          />
           <FormField
             control={form.control}
             name="date"

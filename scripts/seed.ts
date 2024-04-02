@@ -4,22 +4,22 @@ const database = new PrismaClient();
 
 async function main() {
   try {
-    const users = await database.user.findMany(); // Fetch all users
-
-    for (const user of users) {
-      await database.category.createMany({
-        data: [
-          { name: "Salary", userId: user.id },
-          { name: "Home Services", userId: user.id },
-          { name: "Mental Health", userId: user.id },
-          { name: "House Food", userId: user.id },
-          { name: "Subscriptions", userId: user.id },
-          { name: "Personal Care", userId: user.id },
-          { name: "Transportation ", userId: user.id },
-          { name: "Trips ", userId: user.id },
-        ],
-      });
-    }
+    await database.category.createMany({
+      data: [
+        { name: "Salary" },
+        { name: "Home Food" },
+        { name: "Home Services" },
+        { name: "Mental Health" },
+        { name: "Transportation" },
+        { name: "Freelance" },
+        { name: "Trips" },
+        { name: "Subscriptions" },
+        { name: "Personal Care" },
+        { name: "Games" },
+        { name: "Shopping" },
+        { name: "Food" },
+      ],
+    });
 
     console.log("Categories seeded successfully for all users");
   } catch (error) {

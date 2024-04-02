@@ -23,30 +23,39 @@ model User {
   isPro Boolean @default(false)
   firstName String?
   lastName  String?
-  phone     String?
   transactions Transaction[]
-  emails    UserEmail[]
+  userCategories UserCategory[]
 }
-
-model UserEmail {
-  id        String  @id @unique
-  email     String  @unique
-  isPrimary Boolean
-  userId    String
-  user      User    @relation(fields: [userId], references: [id])
-}
-
 
 model Transaction {
   id         String        @id @default(uuid())
   userId     String
   user       User          @relation(fields: [userId], references: [id])
+  categoryName String
+  categoryId String?
+  category   Category?      @relation(fields: [categoryId], references: [id])
+  userCategoryId String?
+  userCategory UserCategory? @relation(fields: [userCategoryId], references: [id])
+  type      TransactionType 
+  title      String
   amount     Float
   date       DateTime
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-  title      String
-  type      TransactionType 
+}
+
+model Category { 
+  id String @id @default(uuid())
+  name String
+  transactions Transaction[]
+}
+
+model UserCategory {
+  id String @id @default(uuid())
+  name String
+  userId String
+  user User @relation(fields: [userId], references: [id])
+  transactions Transaction[]
 }
 
 

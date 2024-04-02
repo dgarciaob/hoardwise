@@ -11,7 +11,7 @@ type CategoryFormProps = {
   disabled: boolean;
   onValueChange: (...event: any[]) => void;
   defaultValue: string;
-  options: { id: string; name: string }[];
+  options: { id: string; name: string; userId?: string }[];
 };
 
 export const CategorySelection = ({

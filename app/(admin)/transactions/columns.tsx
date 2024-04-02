@@ -70,6 +70,14 @@ export const columns: ColumnDef<Transaction>[] = [
     header: "Title",
   },
   {
+    accessorKey: "categoryName",
+    header: "Category",
+    cell: ({ row }) => {
+      const category = row.getValue("categoryName") as string;
+      return <div>{category}</div>;
+    },
+  },
+  {
     accessorKey: "date",
     header: "Date",
     cell: ({ row }) => {
@@ -81,14 +89,7 @@ export const columns: ColumnDef<Transaction>[] = [
       return <div>{formatted}</div>;
     },
   },
-  {
-    accessorKey: "categoryName",
-    header: "Category",
-    cell: ({ row }) => {
-      const category = row.getValue("categoryName") as string;
-      return <div>{category}</div>;
-    },
-  },
+
   {
     accessorKey: "amount",
     header: () => <div className="text-right">Amount</div>,
@@ -99,7 +100,6 @@ export const columns: ColumnDef<Transaction>[] = [
 
       return (
         <div className="text-right font-medium">
-          {" "}
           {type === "Expense" ? "-S/" : "S/"}
           {formatted}
         </div>

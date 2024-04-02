@@ -9,7 +9,7 @@ type TransactionProps = {
   amount: number;
   type: TransactionType;
   date: Date;
-  // category: string;
+  category: string;
 };
 
 export const createTransaction = async ({
@@ -17,12 +17,54 @@ export const createTransaction = async ({
   amount,
   type,
   date,
-}: // category,
-TransactionProps) => {
+  category,
+}: TransactionProps) => {
   const { userId } = auth();
 
   if (!userId) {
     return null;
+  }
+
+  const userDb = await db.user.findUnique({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!userDb) {
+    return null;
+  }
+
+  const categories = await db.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  const userCategories = await db.userCategory.findMany({
+    where: {
+      userId: userDb.id,
+    },
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  const categoryFromCategory = categories.find((c) => c.id === category);
+  const categoryFromUserCategory = userCategories.find(
+    (c) => c.id === category
+  );
+
+  let categoryId = null;
+  let userCategoryId = null;
+  let categoryName = "";
+
+  if (categoryFromCategory) {
+    categoryId = category;
+    categoryName = categoryFromCategory.name;
+  } else if (categoryFromUserCategory) {
+    userCategoryId = category;
+    categoryName = categoryFromUserCategory.name;
   }
 
   const transaction = await db.transaction.create({
@@ -32,7 +74,9 @@ TransactionProps) => {
       type,
       date,
       userId,
-      // categoryName: category,
+      categoryId,
+      userCategoryId,
+      categoryName,
     },
   });
 
