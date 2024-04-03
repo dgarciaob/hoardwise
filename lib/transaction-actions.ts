@@ -10,6 +10,7 @@ type TransactionProps = {
   type: TransactionType;
   date: Date;
   category: string;
+  budget: string;
 };
 
 export const createTransaction = async ({
@@ -18,6 +19,7 @@ export const createTransaction = async ({
   type,
   date,
   category,
+  budget,
 }: TransactionProps) => {
   const { userId } = auth();
 
@@ -67,6 +69,17 @@ export const createTransaction = async ({
     categoryName = categoryFromUserCategory.name;
   }
 
+  const budgets = await db.budget.findMany({
+    where: {
+      userId: userDb.id,
+    },
+    orderBy: {
+      startDate: "desc",
+    },
+  });
+
+  const budgetFromDb = budgets.find((b) => b.id === budget);
+
   const transaction = await db.transaction.create({
     data: {
       title,
@@ -77,6 +90,8 @@ export const createTransaction = async ({
       categoryId,
       userCategoryId,
       categoryName,
+      budgetId: budget || null,
+      budgetName: budgetFromDb ? budgetFromDb.name : "",
     },
   });
 

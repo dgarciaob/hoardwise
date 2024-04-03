@@ -126,10 +126,10 @@ const DashboardPage = async () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {totalExpense ? `S/ ${biggestExpense.amount}` : "No Expense"}
+              {totalExpense ? `S/ ${biggestExpense?.amount}` : "No Expense"}
             </div>
             <p className="text-xs text-muted-foreground">
-              {biggestExpense.title} - {biggestExpense.categoryName}
+              {biggestExpense?.title} - {biggestExpense?.categoryName}
             </p>
           </CardContent>
         </Card>

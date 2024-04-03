@@ -27,6 +27,15 @@ const TransactionPage = async () => {
     orderBy: { createdAt: "desc" },
   });
 
+  const budgets = await db.budget.findMany({
+    where: {
+      userId: userDb.id,
+    },
+    orderBy: {
+      startDate: "desc",
+    },
+  });
+
   const categories = await db.category.findMany({
     orderBy: {
       name: "asc",
@@ -46,8 +55,10 @@ const TransactionPage = async () => {
 
   return (
     <main className="p-6">
-      <h1 className="text-2xl lg:text-3xl font-bold mb-12">Transactions</h1>
-      <TransactionModal options={allCategories} />
+      <div className="flex flex-col space-y-8 mb-12 md:flex md:flex-row md:justify-between md:items-center md:space-y-0">
+        <h1 className="text-2xl lg:text-3xl font-bold">Transactions</h1>
+        <TransactionModal options={allCategories} budgetOptions={budgets} />
+      </div>
       <div className="mt-8 flex flex-col space-y-4">
         <h2 className="text-xl lg:text-2xl font-medium">History</h2>
         <DataTable

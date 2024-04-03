@@ -36,9 +36,18 @@ import { format } from "date-fns";
 
 import { createTransaction } from "@/lib/transaction-actions";
 import { CategorySelection } from "./CategorySelect";
+import { BudgetSelection } from "./BudgetSelect";
 
 type TransactionFormProps = {
   options: { id: string; name: string; userId?: string }[];
+  budgetOptions: {
+    id: string;
+    name: string;
+    userId: string;
+    amount: number;
+    startDate: Date;
+    endDate: Date;
+  }[];
 };
 
 const formSchema = z.object({
@@ -47,9 +56,13 @@ const formSchema = z.object({
   amount: z.coerce.number(),
   date: z.date(),
   category: z.string(),
+  budget: z.string().optional(),
 });
 
-export const TransactionForm = ({ options }: TransactionFormProps) => {
+export const TransactionForm = ({
+  options,
+  budgetOptions,
+}: TransactionFormProps) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -65,7 +78,10 @@ export const TransactionForm = ({ options }: TransactionFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      createTransaction(values);
+      createTransaction({
+        ...values,
+        budget: values.budget || "",
+      });
       toast.success("Transaction created");
       console.log(values);
       router.refresh();
@@ -160,6 +176,25 @@ export const TransactionForm = ({ options }: TransactionFormProps) => {
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                       options={options}
+                    />
+                  </FormControl>
+                </FormItem>
+              );
+            }}
+          />
+          <FormField
+            control={form.control}
+            name="budget"
+            render={({ field }) => {
+              return (
+                <FormItem>
+                  <FormLabel className="text-base">Budget</FormLabel>
+                  <FormControl>
+                    <BudgetSelection
+                      disabled={isSubmitting}
+                      onValueChange={field.onChange}
+                      defaultValue={field.value || ""}
+                      budgetOptions={budgetOptions}
                     />
                   </FormControl>
                 </FormItem>

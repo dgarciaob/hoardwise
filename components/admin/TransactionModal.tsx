@@ -26,9 +26,20 @@ import { useMediaQuery } from "usehooks-ts";
 
 type TransactionModalProps = {
   options: { id: string; name: string; userId?: string }[];
+  budgetOptions: {
+    id: string;
+    name: string;
+    userId: string;
+    amount: number;
+    startDate: Date;
+    endDate: Date;
+  }[];
 };
 
-export const TransactionModal = ({ options }: TransactionModalProps) => {
+export const TransactionModal = ({
+  options,
+  budgetOptions,
+}: TransactionModalProps) => {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -47,7 +58,7 @@ export const TransactionModal = ({ options }: TransactionModalProps) => {
               Fill in the form below to add a new transaction.
             </DialogDescription>
           </DialogHeader>
-          <TransactionForm options={options} />
+          <TransactionForm options={options} budgetOptions={budgetOptions} />
         </DialogContent>
       </Dialog>
     );
@@ -67,7 +78,7 @@ export const TransactionModal = ({ options }: TransactionModalProps) => {
             Fill in the form below to add a new transaction.
           </DrawerDescription>
         </DrawerHeader>
-        <TransactionForm options={options} />
+        <TransactionForm options={options} budgetOptions={budgetOptions} />
       </DrawerContent>
     </Drawer>
   );

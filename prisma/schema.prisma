@@ -25,6 +25,7 @@ model User {
   lastName  String?
   transactions Transaction[]
   userCategories UserCategory[]
+  budgets Budget[]
 }
 
 model Transaction {
@@ -36,6 +37,9 @@ model Transaction {
   category   Category?      @relation(fields: [categoryId], references: [id])
   userCategoryId String?
   userCategory UserCategory? @relation(fields: [userCategoryId], references: [id])
+  budgetName String
+  budgetId   String?
+  budget     Budget?       @relation(fields: [budgetId], references: [id])
   type      TransactionType 
   title      String
   amount     Float
@@ -57,6 +61,18 @@ model UserCategory {
   user User @relation(fields: [userId], references: [id])
   transactions Transaction[]
 }
+
+model Budget {
+  id         String      @id @default(uuid())
+  name       String
+  userId     String
+  user       User        @relation(fields: [userId], references: [id])
+  amount     Float
+  startDate  DateTime
+  endDate    DateTime
+  transactions Transaction[]
+}
+
 
 
 
