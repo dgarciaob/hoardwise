@@ -50,7 +50,11 @@ const TransactionPage = async () => {
       <TransactionModal options={allCategories} />
       <div className="mt-8 flex flex-col space-y-4">
         <h2 className="text-xl lg:text-2xl font-medium">History</h2>
-        <DataTable columns={columns} data={transactions} />
+        <DataTable
+          columns={columns}
+          data={transactions}
+          className="overflow-auto max-h-96"
+        />
       </div>
     </main>
   );
