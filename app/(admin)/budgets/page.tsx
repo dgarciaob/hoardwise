@@ -4,6 +4,8 @@ import { db } from "@/lib/db";
 import { auth, currentUser } from "@clerk/nextjs";
 
 import { startOfMonth, endOfMonth, addMonths } from "date-fns";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 const BudgetsPage = async () => {
   const user = await currentUser();
@@ -44,19 +46,18 @@ const BudgetsPage = async () => {
       </h1>
 
       <div className="flex flex-col space-y-8 mt-4 md:flex md:flex-row md:space-x-8 md:space-y-0">
-        <BudgetForm className="md:w-1/3 w-full" />
-        <Card className="md:w-2/3 w-full p-4 overflow-auto">
-          <CardTitle>My Budgets</CardTitle>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-4 overflow-auto h-28">
-            {budgets ? (
-              budgets.map((budget) => <div key={budget.id}>{budget.name}</div>)
-            ) : (
-              <div className="flex items-center justify-center">
-                No budgets yet.
-              </div>
+        <Card className="md:w-2/3 w-full p-4 overflow-auto max-h-72">
+          <div>
+            {budgets && (
+              <DataTable
+                columns={columns}
+                data={budgets}
+                className="overflow-auto max-h-72"
+              />
             )}
           </div>
         </Card>
+        <BudgetForm className="md:w-1/3 w-full" />
       </div>
     </main>
   );

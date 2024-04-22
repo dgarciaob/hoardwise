@@ -177,33 +177,39 @@ const DashboardPage = async () => {
       <h2 className="text-2xl font-semibold leading-none tracking-tight mt-6">
         Budgets
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-3 overflow-auto">
-        {budgetProgress &&
-          budgetProgress.map((budget) => (
-            <Card key={budget.id} className="p-4">
-              <div className="flex flex-row justify-between items-center">
-                <p className="text-base font-medium">{budget.name}</p>
-                {budget.remaining > 0 ? (
-                  <p className="text-muted-foreground text-xs">
-                    S/{budget.remaining} left
-                  </p>
-                ) : (
-                  <p className="text-muted-foreground text-xs">
-                    Budget complete
-                  </p>
-                )}
-              </div>
-              <ProgressBar
-                value={budget.progress}
-                color="teal"
-                className="mt-2"
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                S/{budget.totalAssigned} of S/{budget.amount}
-              </p>
-            </Card>
-          ))}
-      </div>
+      {budgets ? (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-3 overflow-auto">
+          {budgetProgress &&
+            budgetProgress.map((budget) => (
+              <Card key={budget.id} className="p-4">
+                <div className="flex flex-row justify-between items-center">
+                  <p className="text-base font-medium">{budget.name}</p>
+                  {budget.remaining > 0 ? (
+                    <p className="text-muted-foreground text-xs">
+                      S/{budget.remaining} left
+                    </p>
+                  ) : (
+                    <p className="text-muted-foreground text-xs">
+                      Budget complete
+                    </p>
+                  )}
+                </div>
+                <ProgressBar
+                  value={budget.progress}
+                  color="teal"
+                  className="mt-2"
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  S/{budget.totalAssigned} of S/{budget.amount}
+                </p>
+              </Card>
+            ))}
+        </div>
+      ) : (
+        <div className="flex items-center justify-center text-muted-foreground font-medium">
+          Create a Budget
+        </div>
+      )}
     </main>
   );
 };

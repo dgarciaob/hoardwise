@@ -38,6 +38,12 @@ export const createMonthlyBudget = async ({
   return budget;
 };
 
+export const deleteBudget = async (budgetId: string) => {
+  await db.budget.delete({
+    where: { id: budgetId },
+  });
+};
+
 // const calculateBudgetProgress = async (budgetId: string) => {
 //   // Calculate start and end dates for the current month
 //   const currentDate = new Date();
